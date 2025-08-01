@@ -31,20 +31,30 @@ jobs:
           npm run seed
           nohup node app.js > backend.log 2>&1 &
 
-      - name: Install and Start Frontend (on port 3000)
+      - name: Install and Start Frontend (port 3000)
         working-directory: ./client
         run: |
           npm install
           nohup npm start > frontend.log 2>&1 &
 
-      - name: Wait for Backend and Frontend to start
+      - name: Wait for Backend and Frontend to be ready
         run: sleep 15
 
-      - name: Run API Tests
+      - name: Run API Tests (Jest)
         working-directory: ./supertest-automation
         run: |
           npm install
           npm test
+
+      - name: Restart Backend for Cypress UI tests
+        working-directory: ./api
+        run: |
+          pkill -f app.js || true
+          npm run seed
+          nohup node app.js > backend2.log 2>&1 &
+
+      - name: Wait for Backend to be ready again
+        run: sleep 10
 
       - name: Run UI Tests (Cypress)
         working-directory: ./cypress-automation
