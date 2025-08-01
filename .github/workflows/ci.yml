@@ -2,78 +2,52 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     services:
       mongo:
         image: mongo
         ports:
           - 27017:27017
-        options: --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
-      - name: ⬇️ Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🔧 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # ----------- Backend Setup -----------
-      - name: 📦 Install Backend Dependencies
+      - name: Install and Start Backend (port 5050)
         working-directory: ./api
         run: |
           npm install
           npm run seed
+          nohup node app.js > backend.log 2>&1 &
 
-      - name: 🚀 Start Backend in Background
-        working-directory: ./api
-        run: |
-          nohup node app.js > ../backend.log 2>&1 &
-          sleep 10
-
-      # ----------- API Tests -----------
-      - name: 📦 Install API Test Dependencies
-        working-directory: ./supertest-automation
-        run: npm install
-
-      - name: 🤮 Run API Tests (Jest)
-        working-directory: ./supertest-automation
-        run: npm test
-
-      # ----------- Frontend Setup -----------
-      - name: 📦 Install Frontend Dependencies
-        working-directory: ./client
-        run: npm install
-
-      - name: 🚀 Start Frontend in Background
+      - name: Install and Start Frontend (on port 3000)
         working-directory: ./client
         run: |
-          nohup npm start > ../frontend.log 2>&1 &
-          sleep 15
+          npm install
+          nohup npm start > frontend.log 2>&1 &
 
-      # ----------- Cypress UI Tests -----------
-      - name: 📦 Install Cypress Dependencies
+      - name: Wait for Backend and Frontend to start
+        run: sleep 15
+
+      - name: Run API Tests
+        working-directory: ./supertest-automation
+        run: |
+          npm install
+          npm test
+
+      - name: Run UI Tests (Cypress)
         working-directory: ./cypress-automation
-        run: npm install
-
-      - name: 🤮 Run Cypress UI Tests (Headless)
-        working-directory: ./cypress-automation
-        run: npm test
-
-      # ----------- Debug: Upload Logs on Failure -----------
-      - name: 📄 Upload Logs (if failure)
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: logs
-          path: |
-            backend.log
-            frontend.log
+        run: |
+          npm install
+          npm run test:ci
