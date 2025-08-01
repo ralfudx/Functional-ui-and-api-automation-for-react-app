@@ -1,0 +1,21 @@
+{
+  "name": "supertest-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.test.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Raphael Edwards",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/supertest": "^6.0.3",
+    "jest": "^30.0.5",
+    "prettier": "3.6.2",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.0"
+  }
+}

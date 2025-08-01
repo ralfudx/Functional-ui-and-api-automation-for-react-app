@@ -1,0 +1,22 @@
+{
+  "name": "cypress-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run --browser chrome",
+    "test:ci": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@simonsmith/cypress-image-snapshot": "^9.1.0",
+    "@types/cypress": "^0.1.6",
+    "cypress": "^14.5.3",
+    "cypress-plugin-api": "^2.11.2",
+    "tsconfig": "^7.0.0",
+    "typescript": "^5.9.2"
+  }
+}
