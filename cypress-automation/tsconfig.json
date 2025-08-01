@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "dom"],
+    "types": [
+      "cypress-plugin-api",
+      "node",
+      "@simonsmith/cypress-image-snapshot/types"
+    ]
+  },
+  "include": ["**/*.ts", "cypress.config.js"]
+}
