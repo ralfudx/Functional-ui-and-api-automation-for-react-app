@@ -57,7 +57,7 @@ The project tests both:
 
 ---
 
-## 🚀 How to Run the Tests
+## 🚀 Running the App Locally
 
 ### 1. Start the Backend
 ```bash
@@ -67,6 +67,7 @@ npm install
 npm run seed
 node app.js
 ```
+> The backend server runs on port 5050
 
 ### 2. Start the Frontend
 ```bash
@@ -75,8 +76,13 @@ cd client
 npm install
 npm start
 ```
+> The React frontend runs on port 3000
 
-### 3. Run API Tests (Jest)
+---
+
+## 🔬 Running the Tests Locally
+
+### 1. Run API Tests (Jest)
 ```bash
 #open a new terminal window - from the root directory and restart the backend before running new tests
 cd supertest-automation
@@ -84,27 +90,32 @@ npm install
 npm test
 ```
 
-### 4. Run UI Tests (Cypress)
+### 2. Run UI Tests (Cypress)
 ```bash
 #open a new terminal window - from the root directory and restart the backend before running new tests
 cd cypress-automation
 npm install
+# For interactive mode:
 npx cypress open
 #or for headless run:
 npm test 
 ```
 
 ProTip:
-> Always restart the backend (run step 1 again) each time you want to rerun the API or UI Tests
+> 🔁 Before Cypress tests: You must re-run `npm run seed && node app.js` from the /api directory to refresh backend data.
 
 ---
 
-## 📝 Assumptions & Limitations
-- API tests run on a temporary server instance with in-memory data.
-- No database is currently connected; test data resets on server restart.
-- Cypress assumes the frontend is available at http://localhost:3000
-- CORS must be configured if frontend and backend are served from different ports.
+## ✅ CI Integration with GitHub Actions
+All test scripts have been integrated into a GitHub Actions CI pipeline.
+The CI workflow automatically:
 
+- Installs dependencies
+- Starts backend and frontend
+- Runs API and UI tests
+- Triggers on every push or pull request to the main branch
+
+This ensures continuous test feedback during development and collaboration.
 
 ---
 
@@ -136,9 +147,22 @@ Functional-ui-and-api-automation-for-react-app/
 │   │   └── api.test.ts
 │   ├── jest.config.ts
 │   ├── tsconfig.json
+├── .github/workflows/     # GitHub Actions pipeline
+│   ├── ci.yml
 ├── README.md
 ```
 
-Happy Testing! 🧪
+---
+
+## 📝 Assumptions & Limitations
+- API tests run on a temporary server instance with in-memory data.
+- No database is currently connected; test data resets on server restart.
+- Cypress assumes the frontend is available at http://localhost:3000
+- CORS must be configured if frontend and backend are served from different ports.
+
+---
+
+## 📬 Feedback
+Feel free to fork, contribute, or raise issues. Happy Testing! 🧪
 
 ---
